@@ -1,0 +1,27 @@
+<idea-plugin version="2">
+    <id>com.zelkatani.frc</id>
+    <name>FRC Intellij Plugin</name>
+    <version>1.0</version>
+    <vendor email="zelkatani@gmail.com" url="https://github.com/zelkatani">Zakaria Elkatani</vendor>
+
+    <description><![CDATA[
+        WPILib Plugin for FRC teams who use IntelliJ
+    ]]></description>
+
+    <change-notes><![CDATA[
+        In Development
+    ]]></change-notes>
+
+    <idea-version since-build="145.0"/>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- No extensions -->
+    </extensions>
+
+    <actions>
+        <group text="WPILib">
+            <add-to-group group-id="MainMenu" relative-to-action="RunMenu" anchor="after"/>
+        </group>
+    </actions>
+
+</idea-plugin>
