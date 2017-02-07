@@ -21,14 +21,14 @@
     <actions>
         <group text="WPILib">
             <add-to-group group-id="MainMenu" relative-to-action="RunMenu" anchor="after"/>
-            <action class="com.team334.frcplugin.wizard.WPILibInstall" id="InstallWPILib"
+            <action class="com.team334.frcplugin.wizard.Install" id="Install"
                     text="Install WPILib" description="First time installation of WPILib"
             />
             <action class="com.team334.frcplugin.deploy.DeployAction" id="DeployAction"
                     text="Deploy" description="Deploy robot code"
             />
-            <action class="com.team334.frcplugin.wizard.WPILibProperties" id="WPILibProperties"
-                    text="WPILib Properties" description="WPILib Properties"
+            <action class="com.team334.frcplugin.wizard.Properties" id="Properties"
+                    text="Modify Properties" description="Modify Properties"
             />
         </group>
     </actions>

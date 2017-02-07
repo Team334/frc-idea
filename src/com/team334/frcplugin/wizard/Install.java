@@ -20,11 +20,11 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
-public class WPILibInstall extends AnAction {
-    private final WPILibProperties WPI_PROPS = new WPILibProperties();
+import static com.team334.frcplugin.wizard.Properties.WPI_DIR;
+import static com.team334.frcplugin.wizard.Properties.WPI_PATH;
 
-    private final String WPI_PATH = System.getProperty("user.home") + "/wpilib";
-    private final File WPI_DIR = new File(WPI_PATH);
+public class Install extends AnAction {
+    private final Properties WPI_PROPS = new Properties();
 
     private final String BASE_URL = "http://first.wpi.edu/FRC/roborio/release/eclipse/";
 
@@ -38,6 +38,7 @@ public class WPILibInstall extends AnAction {
             }
 
             install();
+            new Properties().actionPerformed(e);
 
             // create user directories
             new File(WPI_PATH, "user/java").mkdirs();
