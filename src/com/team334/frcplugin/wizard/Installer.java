@@ -9,7 +9,10 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
@@ -23,7 +26,8 @@ import java.util.zip.ZipEntry;
 import static com.team334.frcplugin.wizard.Properties.WPI_DIR;
 import static com.team334.frcplugin.wizard.Properties.WPI_PATH;
 
-public class Install extends AnAction {
+public class Installer extends AnAction { // implements PersistentStateComponent<Boolean> {
+    public static boolean INSTALLED = false;
     private final Properties WPI_PROPS = new Properties();
 
     private final String BASE_URL = "http://first.wpi.edu/FRC/roborio/release/eclipse/";
@@ -48,12 +52,13 @@ public class Install extends AnAction {
     @Override
     public void update(@NotNull AnActionEvent e) {
         Presentation p = e.getPresentation();
-        if (p.isEnabled() && WPI_DIR.exists()) {
+        if (WPI_DIR.exists()) {
+            INSTALLED = false;
             p.setEnabled(false);
             p.setVisible(false);
         }
     }
-    
+
     private void install() {
         try {
             final File TEMP_DIR = File.createTempFile("wpilib", null);
@@ -66,7 +71,8 @@ public class Install extends AnAction {
                 }
             }
 
-            TEMP_DIR.deleteOnExit();
+            TEMP_DIR.delete();
+            INSTALLED = true;
         } catch (IOException e) {
             e.printStackTrace();
         }

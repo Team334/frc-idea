@@ -2,10 +2,8 @@ package com.team334.frcplugin.wizard;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.team334.frcplugin.panels.PropertiesControl;
 
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,32 +12,19 @@ public class Properties extends AnAction {
     public static final String WPI_PATH = System.getProperty("user.home") + "/wpilib";
     public static final File WPI_DIR = new File(WPI_PATH);
 
-    private String teamNumber = String.valueOf(0);
-    private String version = "current";
+    private static String teamNumber = String.valueOf(0);
+    private static String version = "current";
 
     @Override
     public void actionPerformed(AnActionEvent e) {
-        SetProperties props = new SetProperties();
-        
-        props.getTeamNumberField().setText(teamNumber);
-        props.getVersionField().setSelectedItem(version);
+        PropertiesControl props = new PropertiesControl();
 
-        props.getCancelButton().addActionListener((actionEvent) -> props.dispose());
+        props.getTeamNumberField().setText(getTeamNumber());
+        props.getVersionField().setSelectedItem(getVersion());
 
-        props.getSubmitButton().addActionListener((ActionEvent actionEvent) -> {
-            setTeamNumber(props.getTeamNumberField().getText());
-            setVersion(props.getVersionField().getSelectedItem().toString());
+        props.setModal(true);
 
-            props.dispose();
-
-            if (WPI_DIR.exists()) {
-                try {
-                    serialize(WPI_PATH);
-                } catch (IOException io) {
-                    io.printStackTrace();
-                }
-            }
-        });
+        props.show();
     }
 
     public void setTeamNumber(String teamNumber) {
