@@ -18,7 +18,7 @@ public class Project extends DialogWrapper {
     private JPanel rotator = new JPanel(cl);
 
     public Project() {
-        super(true);
+        super(false);
 
         setTitle("New Project");
         init();

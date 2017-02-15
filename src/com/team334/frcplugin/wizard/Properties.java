@@ -22,7 +22,7 @@ public class Properties extends AnAction {
         props.getTeamNumberField().setText(getTeamNumber());
         props.getVersionField().setSelectedItem(getVersion());
 
-        props.setModal(true);
+        props.setModal(false);
 
         props.show();
     }

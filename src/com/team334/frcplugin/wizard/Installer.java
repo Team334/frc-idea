@@ -3,12 +3,16 @@ package com.team334.frcplugin.wizard;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
+import com.intellij.openapi.ui.DialogWrapper;
+import com.team334.frcplugin.panels.InstallProgress;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -26,11 +30,58 @@ import java.util.zip.ZipEntry;
 import static com.team334.frcplugin.wizard.Properties.WPI_DIR;
 import static com.team334.frcplugin.wizard.Properties.WPI_PATH;
 
-public class Installer extends AnAction { // implements PersistentStateComponent<Boolean> {
-    public static boolean INSTALLED = false;
+public class Installer extends AnAction {
+    static boolean INSTALLED = false;
     private final Properties WPI_PROPS = new Properties();
 
     private final String BASE_URL = "http://first.wpi.edu/FRC/roborio/release/eclipse/";
+
+    private Logger logger = new Logger();
+    Thread t = new Thread(() -> install());
+
+    private class Logger extends DialogWrapper {
+        private InstallProgress progress = new InstallProgress();
+
+        Logger() {
+            super(false);
+
+            setTitle("WPILib Installer");
+
+            init();
+        }
+
+        private void shiftProgress(int shift) {
+            JProgressBar bar = progress.getProgress();
+            bar.setValue(bar.getValue() + shift);
+        }
+
+        void log(String message) {
+            progress.getLog().append(message);
+        }
+
+        void log(String message, int shift) {
+            log(message);
+            shiftProgress(shift);
+        }
+
+        @Nullable
+        @Override
+        protected JComponent createCenterPanel() {
+            return progress.getPanel();
+        }
+
+        @Override
+        public void doCancelAction() {
+            t.interrupt();
+            close(OK_EXIT_CODE);
+        }
+
+        @Override
+        public void doOKAction() {
+            WPI_PROPS.actionPerformed(null);
+            close(OK_EXIT_CODE);
+        }
+    }
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
@@ -41,8 +92,12 @@ public class Installer extends AnAction { // implements PersistentStateComponent
                 io.printStackTrace();
             }
 
-            install();
-            new Properties().actionPerformed(e);
+            logger.setModal(false);
+            logger.setResizable(false);
+
+            logger.show();
+
+            SwingUtilities.invokeLater(() -> t.start());
 
             // create user directories
             new File(WPI_PATH, "user/java").mkdirs();
@@ -80,13 +135,13 @@ public class Installer extends AnAction { // implements PersistentStateComponent
 
     private void loadLibraries(@NotNull String tempDir, @NotNull String wpiDir) {
         try {
-            System.out.format("Downloading site.xml from %s\n", BASE_URL + "site.xl");
+            logger.log(String.format("Downloading site.xml from %ssite.xml\n", BASE_URL), 5);
             File siteXML = downloadFromURL(BASE_URL + "site.xml", "site.xml", tempDir);
 
             String featureURL = BASE_URL + findXMLAttribute(siteXML, "feature", "url");
             JarFile featureJar = new JarFile(downloadFromURL(featureURL, "feature.jar", tempDir));
 
-            System.out.format("Downloading %s and extracting feature.xml\n", featureURL);
+            logger.log(String.format("Downloading %s and extracting feature.xml\n", featureURL), 10);
             File featureXML = extractFileFromJar(featureJar, "feature.xml", tempDir);
 
             final String PLUGIN = findXMLAttribute(featureXML, "plugin", "id");
@@ -94,13 +149,13 @@ public class Installer extends AnAction { // implements PersistentStateComponent
             final String PLUGIN_JAR = PLUGIN + "_" + VERSION;
             final String PLUGIN_URL = BASE_URL + "plugins/" + PLUGIN_JAR + ".jar";
 
-            System.out.format("Downloading %s and extracting resources/java.zip\n", PLUGIN_URL);
+            logger.log(String.format("Downloading %s and extracting resources/java.zip\n", PLUGIN_URL), 25);
             JarFile wpiLibJavaJar = new JarFile(downloadFromURL(PLUGIN_URL, "wpilib.jar", tempDir));
 
-            JarFile javaJar;
-            javaJar = new JarFile(extractFileFromJar(wpiLibJavaJar, "resources", "java.zip", tempDir));
+            File javaZip = extractFileFromJar(wpiLibJavaJar, "resources", "java.zip", tempDir);
+            JarFile javaJar = new JarFile(javaZip);
 
-            System.out.println("Extracting files from java.zip");
+            logger.log("Extracting files from java.zip\n", 1);
             extractFolderFromJar(javaJar, "ant/", wpiDir);
             extractFolderFromJar(javaJar, "lib/", wpiDir);
             extractFolderFromJar(javaJar, "javadoc/", wpiDir);
@@ -175,13 +230,13 @@ public class Installer extends AnAction { // implements PersistentStateComponent
             JarEntry entry = entries.nextElement();
             if (entry.getName().contains(directory)) {
                 if (entry.isDirectory()) {
-                    System.out.print("creating: ");
+                    logger.log("creating: ");
                     new File(toDir, entry.getName()).mkdir();
                 } else {
-                    System.out.print("inflating: ");
+                    logger.log("inflating: ");
                     extractFileFromJar(jar, entry.getName(), toDir);
                 }
-                System.out.println(entry.getName());
+                logger.log(entry.getName() + "\n", 1);
             }
         }
     }
