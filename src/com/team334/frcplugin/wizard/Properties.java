@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+// TODO implement PersistentStateComponent for persistence
 public class Properties extends AnAction {
     public static final String WPI_PATH = System.getProperty("user.home") + "/wpilib";
     public static final File WPI_DIR = new File(WPI_PATH);

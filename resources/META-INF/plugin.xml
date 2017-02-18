@@ -14,20 +14,13 @@
 
     <idea-version since-build="145.0"/>
 
-    <extensions defaultExtensionNs="com.intellij"></extensions>
+    <extensions defaultExtensionNs="com.intellij">
+        <projectTemplatesFactory implementation="com.team334.frcplugin.project.ProjectFactory"/>
+    </extensions>
 
     <application-components></application-components>
 
     <actions>
-        <group text="New Project">
-            <separator/>
-            <add-to-group group-id="NewProjectOrModuleGroup" anchor="last"/>
-            <action class="com.team334.frcplugin.project.ProjectTemplate" id="NewProjectTemplate"
-                    icon="/icons/wpi.png" text="WPILib Project" description="Create a new WPILib Project"
-            />
-            <separator/>
-        </group>
-
         <group text="WPILib">
             <add-to-group group-id="MainMenu" relative-to-action="RunMenu" anchor="after"/>
             <action class="com.team334.frcplugin.wizard.Installer" id="Install" icon="/icons/wpi.png"

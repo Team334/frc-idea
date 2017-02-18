@@ -8,12 +8,9 @@ public class RobotProject {
     private JPanel robotProject;
 
     private JPanel projectType;
-    private JPanel projectInfo;
 
-    private JTextField projectField;
     private JTextField packageField;
 
-    private JLabel nameLabel;
     private JLabel packageLabel;
 
     private JRadioButton iterativeBased;
@@ -24,6 +21,7 @@ public class RobotProject {
     private String teamPackage = "org.usfirst.frc.team" + new Properties().getTeamNumber() + ".robot";
 
     public JPanel getPanel() {
+        setPackageField();
         return robotProject;
     }
 
@@ -31,7 +29,7 @@ public class RobotProject {
         return teamPackage;
     }
 
-    public void setPackageField() {
+    private void setPackageField() {
         packageField.setText(teamPackage);
     }
 }
