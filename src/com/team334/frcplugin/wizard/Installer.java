@@ -4,6 +4,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.team334.frcplugin.Settings;
 import com.team334.frcplugin.panels.InstallProgress;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -31,20 +32,17 @@ import static com.team334.frcplugin.wizard.Properties.WPI_DIR;
 import static com.team334.frcplugin.wizard.Properties.WPI_PATH;
 
 public class Installer extends AnAction {
-    static boolean INSTALLED = false;
-    private final Properties WPI_PROPS = new Properties();
-
-    private final String BASE_URL = "http://first.wpi.edu/FRC/roborio/release/eclipse/";
+    private Properties props = new Properties();
+    private Settings settings = Settings.getInstance();
 
     private Logger logger = new Logger();
-    Thread t = new Thread(() -> install());
+    private Thread t = new Thread(() -> install());
 
     private class Logger extends DialogWrapper {
         private InstallProgress progress = new InstallProgress();
 
         Logger() {
             super(false);
-
             setTitle("WPILib Installer");
 
             init();
@@ -78,7 +76,7 @@ public class Installer extends AnAction {
 
         @Override
         public void doOKAction() {
-            WPI_PROPS.actionPerformed(null);
+            props.actionPerformed(null);
             close(OK_EXIT_CODE);
         }
     }
@@ -86,12 +84,6 @@ public class Installer extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         if (WPI_DIR.mkdir()) {
-            try {
-                WPI_PROPS.serialize(WPI_PATH);
-            } catch (IOException io) {
-                io.printStackTrace();
-            }
-
             logger.setModal(false);
             logger.setResizable(false);
 
@@ -99,16 +91,14 @@ public class Installer extends AnAction {
 
             SwingUtilities.invokeLater(() -> t.start());
 
-            // create user directories
             new File(WPI_PATH, "user/java").mkdirs();
         }
     }
 
     @Override
     public void update(@NotNull AnActionEvent e) {
-        Presentation p = e.getPresentation();
-        if (WPI_DIR.exists()) {
-            INSTALLED = false;
+        if (Settings.installed && WPI_DIR.exists()) {
+            Presentation p = e.getPresentation();
             p.setEnabled(false);
             p.setVisible(false);
         }
@@ -120,20 +110,21 @@ public class Installer extends AnAction {
             TEMP_DIR.delete();
 
             if (TEMP_DIR.mkdir()) {
-                String pluginPath = WPI_PATH + "/java/" + WPI_PROPS.getVersion();
+                String pluginPath = WPI_PATH + "/java/" + settings.getVersion();
                 if (new File(pluginPath).mkdirs()) {
                     loadLibraries(TEMP_DIR.getAbsolutePath(), pluginPath);
                 }
             }
 
             TEMP_DIR.delete();
-            INSTALLED = true;
+            Settings.installed = true;
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private void loadLibraries(@NotNull String tempDir, @NotNull String wpiDir) {
+        final String BASE_URL = "http://first.wpi.edu/FRC/roborio/release/eclipse/";
         try {
             logger.log(String.format("Downloading site.xml from %ssite.xml\n", BASE_URL), 5);
             File siteXML = downloadFromURL(BASE_URL + "site.xml", "site.xml", tempDir);

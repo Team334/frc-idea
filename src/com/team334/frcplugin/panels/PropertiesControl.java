@@ -1,6 +1,7 @@
 package com.team334.frcplugin.panels;
 
 import com.intellij.openapi.ui.DialogWrapper;
+import com.team334.frcplugin.Settings;
 import com.team334.frcplugin.wizard.Properties;
 import org.jetbrains.annotations.Nullable;
 
@@ -8,25 +9,28 @@ import javax.swing.*;
 import java.io.IOException;
 import java.text.NumberFormat;
 
-import static com.team334.frcplugin.wizard.Properties.WPI_DIR;
 import static com.team334.frcplugin.wizard.Properties.WPI_PATH;
 
 public class PropertiesControl extends DialogWrapper {
-    private Properties prop = new Properties();
+    private Settings settings;
+    private Properties prop;
+
     private JPanel mainPanel;
 
     private JFormattedTextField teamNumberField;
-    private NumberFormat numberFormat;
 
     private JComboBox versionField;
 
     public PropertiesControl() {
         super(false);
-
         setTitle("Set Properties");
-        init();
 
-        versionField.setSelectedItem(prop.getVersion());
+        settings = Settings.getInstance();
+        prop = new Properties();
+
+        versionField.setSelectedItem(settings.getVersion());
+
+        init();
     }
 
     public JFormattedTextField getTeamNumberField() {
@@ -39,10 +43,10 @@ public class PropertiesControl extends DialogWrapper {
 
     @Override
     protected void doOKAction() {
-        prop.setTeamNumber(getTeamNumberField().getText());
-        prop.setVersion(getVersionField().getSelectedItem().toString());
+        settings.setTeamNumber(getTeamNumberField().getText());
+        settings.setVersion(getVersionField().getSelectedItem().toString());
 
-        if (WPI_DIR.exists()) {
+        if (Settings.installed) {
             try {
                 prop.serialize(WPI_PATH);
             } catch (IOException io) {
@@ -54,7 +58,7 @@ public class PropertiesControl extends DialogWrapper {
     }
 
     private void createUIComponents() {
-        numberFormat = NumberFormat.getIntegerInstance();
+        NumberFormat numberFormat = NumberFormat.getIntegerInstance();
         numberFormat.setGroupingUsed(false);
         numberFormat.setParseIntegerOnly(true);
 

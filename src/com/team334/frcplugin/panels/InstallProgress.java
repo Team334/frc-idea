@@ -2,7 +2,7 @@ package com.team334.frcplugin.panels;
 
 import javax.swing.*;
 
-public class InstallProgress {
+public class InstallProgress extends JPanel {
     private JPanel progressPanel;
     private JProgressBar progress;
     private JTextArea log;

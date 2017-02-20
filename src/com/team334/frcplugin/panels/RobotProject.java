@@ -1,10 +1,12 @@
 package com.team334.frcplugin.panels;
 
-import com.team334.frcplugin.wizard.Properties;
+import com.team334.frcplugin.Settings;
 
 import javax.swing.*;
 
 public class RobotProject {
+    private Settings settings = Settings.getInstance();
+
     private JPanel robotProject;
 
     private JPanel projectType;
@@ -17,19 +19,12 @@ public class RobotProject {
     private JRadioButton commandBased;
     private JRadioButton sampleBased;
 
-    private String teamProject;
-    private String teamPackage = "org.usfirst.frc.team" + new Properties().getTeamNumber() + ".robot";
-
     public JPanel getPanel() {
         setPackageField();
         return robotProject;
     }
 
-    public String getTeamPackage() {
-        return teamPackage;
-    }
-
     private void setPackageField() {
-        packageField.setText(teamPackage);
+        packageField.setText(settings.getPackage());
     }
 }

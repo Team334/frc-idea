@@ -7,7 +7,7 @@
     <description><![CDATA[
         A WPILib Plugin for FRC teams who use IntelliJ
     ]]></description>
-
+````
     <change-notes><![CDATA[
         In Development
     ]]></change-notes>
@@ -16,6 +16,8 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <projectTemplatesFactory implementation="com.team334.frcplugin.project.ProjectFactory"/>
+        <projectService serviceInterface="com.team334.frcplugin.Settings"
+                        serviceImplementation="com.team334.frcplugin.Settings"/>
     </extensions>
 
     <application-components></application-components>

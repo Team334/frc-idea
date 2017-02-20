@@ -7,6 +7,7 @@ import com.intellij.openapi.module.JavaModuleType;
 import com.intellij.ui.components.JBList;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.JBScrollPane;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,14 +15,14 @@ import java.awt.*;
 public class ExampleModuleBuilder extends JavaModuleBuilder {
 
     @Override
-    public ModuleWizardStep modifySettingsStep(SettingsStep settingsStep) {
+    public ModuleWizardStep modifySettingsStep(@NotNull SettingsStep settingsStep) {
         return new ExampleStep(settingsStep);
     }
 
     private class ExampleStep extends ModuleWizardStep {
         private ModuleWizardStep javaStep;
 
-        public ExampleStep(SettingsStep settingsStep) {
+        ExampleStep(SettingsStep settingsStep) {
             javaStep = JavaModuleType.getModuleType().modifyProjectTypeStep(settingsStep, ExampleModuleBuilder.this);
             settingsStep.addSettingsComponent(createUIComponents());
         }
