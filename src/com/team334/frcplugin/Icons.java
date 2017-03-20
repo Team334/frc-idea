@@ -2,7 +2,7 @@ package com.team334.frcplugin;
 
 import com.intellij.openapi.util.IconLoader;
 
-import javax.swing.Icon;
+import javax.swing.*;
 
 public final class Icons {
 
@@ -14,5 +14,5 @@ public final class Icons {
     public static final Icon GAZEBO = IconLoader.findIcon("/icons/Gazebo.png");
     public static final Icon PID_SUBSYSTEM = IconLoader.findIcon("/icons/PIDSubsystem.png");
     public static final Icon SUBSYSTEM = IconLoader.findIcon("/icons/Subsystem.png");
-    public static final Icon WPI_ICON = IconLoader.findIcon("/icons/wpi.png" );
+    public static final Icon WPI = IconLoader.findIcon("/icons/wpi.png" );
 }

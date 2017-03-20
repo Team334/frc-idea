@@ -25,7 +25,7 @@ public class RobotTemplate implements ProjectTemplate {
 
     @Override
     public Icon getIcon() {
-        return Icons.WPI_ICON;
+        return Icons.WPI;
     }
 
     @NotNull

@@ -33,10 +33,10 @@ import static com.team334.frcplugin.wizard.Properties.WPI_PATH;
 
 public class Installer extends AnAction {
     private Properties props = new Properties();
-    private Settings settings = Settings.getInstance();
+    private Settings settings = Settings.INSTANCE;
 
     private Logger logger = new Logger();
-    private Thread t = new Thread(() -> install());
+    private Thread t = new Thread(this::install);
 
     private class Logger extends DialogWrapper {
         private InstallProgress progress = new InstallProgress();

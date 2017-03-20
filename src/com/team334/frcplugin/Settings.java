@@ -21,13 +21,9 @@ public class Settings implements PersistentStateComponent<Settings> {
 
     public static boolean installed = false;
 
-    private static Settings settings = new Settings();
+    public static final Settings INSTANCE = new Settings();
 
     private Settings() {}
-
-    public static Settings getInstance() {
-        return settings;
-    }
 
     public String getTeamNumber() {
         return teamNumber;
@@ -35,6 +31,7 @@ public class Settings implements PersistentStateComponent<Settings> {
 
     public void setTeamNumber(String teamNumber) {
         Settings.teamNumber = teamNumber;
+        Settings.projectPackage = "org.usfirst.frc.team" + teamNumber + ".robot";
     }
 
     public String getVersion() {
@@ -47,10 +44,6 @@ public class Settings implements PersistentStateComponent<Settings> {
 
     public String getPackage() {
         return projectPackage;
-    }
-
-    public void setPackage(String teamNumber) {
-        Settings.projectPackage = "org.usfirst.frc.team" + teamNumber + ".robot";
     }
 
     @Nullable

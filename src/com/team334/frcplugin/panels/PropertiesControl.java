@@ -25,7 +25,7 @@ public class PropertiesControl extends DialogWrapper {
         super(false);
         setTitle("Set Properties");
 
-        settings = Settings.getInstance();
+        settings = Settings.INSTANCE;
         prop = new Properties();
 
         versionField.setSelectedItem(settings.getVersion());

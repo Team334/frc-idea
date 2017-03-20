@@ -25,6 +25,6 @@ public class ProjectFactory extends ProjectTemplatesFactory {
 
     @Override
     public Icon getGroupIcon(String group) {
-        return Icons.WPI_ICON;
+        return Icons.WPI;
     }
 }
