@@ -1,4 +1,4 @@
-package com.team334.frcplugin.deploy;
+package com.team334.frcplugin.actions;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;

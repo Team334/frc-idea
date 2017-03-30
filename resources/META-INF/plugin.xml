@@ -7,7 +7,7 @@
     <description><![CDATA[
         A WPILib Plugin for FRC teams who use IntelliJ
     ]]></description>
-````
+
     <change-notes><![CDATA[
         In Development
     ]]></change-notes>
@@ -20,15 +20,13 @@
                         serviceImplementation="com.team334.frcplugin.Settings"/>
     </extensions>
 
-    <application-components></application-components>
-
     <actions>
         <group text="WPILib">
             <add-to-group group-id="MainMenu" relative-to-action="RunMenu" anchor="after"/>
             <action class="com.team334.frcplugin.wizard.Installer" id="Install" icon="/icons/wpi.png"
                     text="Install WPILib" description="First time installation of WPILib"
             />
-            <action class="com.team334.frcplugin.deploy.Deploy" id="DeployAction"
+            <action class="com.team334.frcplugin.actions.Deploy" id="Deploy"
                     text="Deploy" description="Deploy robot code"
             />
             <action class="com.team334.frcplugin.wizard.Properties" id="Properties"

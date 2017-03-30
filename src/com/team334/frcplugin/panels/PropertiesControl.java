@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.io.IOException;
 import java.text.NumberFormat;
 
-import static com.team334.frcplugin.wizard.Properties.WPI_PATH;
+import static com.team334.frcplugin.Settings.WPI_PATH;
 
 public class PropertiesControl extends DialogWrapper {
     private Settings settings;

@@ -28,10 +28,6 @@ public class RobotProject {
         packageField.setText(settings.getPackage());
     }
 
-    public String getPackageField() {
-        return packageField.getText();
-    }
-
     private JRadioButton[] getRadioButtons() {
         return new JRadioButton[] {iterativeBased, commandBased, sampleBased};
     }

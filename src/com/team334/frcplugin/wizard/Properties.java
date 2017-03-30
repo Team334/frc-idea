@@ -12,8 +12,7 @@ import java.io.IOException;
 public class Properties extends AnAction {
     private Settings settings = Settings.INSTANCE;
 
-    public static final String WPI_PATH = System.getProperty("user.home") + "/wpilib";
-    static final File WPI_DIR = new File(WPI_PATH);
+    static final File WPI_DIR = new File(Settings.WPI_PATH);
 
     @Override
     public void actionPerformed(AnActionEvent e) {

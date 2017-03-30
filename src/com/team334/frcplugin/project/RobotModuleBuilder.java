@@ -19,10 +19,19 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class RobotModuleBuilder extends JavaModuleBuilder {
+    String[] modules = new String[] {
+            "WPILib", "NetworkTables", "opencv", "cscore"
+    };
 
     @Override
     public ModuleWizardStep modifySettingsStep(@NotNull SettingsStep settingsStep) {
         return new RobotStep(settingsStep);
+    }
+
+    public RobotModuleBuilder() {
+        for (String module : modules) {
+            addModuleLibrary(Settings.WPI_LIBS + File.separator + module + ".jar", null);
+        }
     }
 
     private class RobotStep extends ModuleWizardStep {
@@ -33,15 +42,15 @@ public class RobotModuleBuilder extends JavaModuleBuilder {
         private String pkg = settings.getPackage();
         private String folderStructure = pkg.replaceAll("\\.", File.separator);
 
+        private URL resourceUrl = this.getClass().getClassLoader().getResource("templates/");
+        private File resourceFolder = new File(resourceUrl.getPath());
+
         RobotStep(SettingsStep settingsStep) {
             javaStep = JavaModuleType.getModuleType().modifyProjectTypeStep(settingsStep, RobotModuleBuilder.this);
             robotProject = new RobotProject();
 
             settingsStep.addSettingsComponent(robotProject.getPanel());
         }
-
-        private URL resourceUrl = this.getClass().getClassLoader().getResource("templates/");
-        private File resourceFolder = new File(resourceUrl.getPath());
 
         private void getFiles() {
             for (File file : resourceFolder.listFiles()) {
@@ -101,9 +110,10 @@ public class RobotModuleBuilder extends JavaModuleBuilder {
         public void updateDataModel() {
             javaStep.updateDataModel();
 
-            new File(Pair.getFirst(getSourcePaths().get(0)), folderStructure).mkdirs();
             getFiles();
-            copyRobotFile(robotProject.getSelectedRadioButton());
+            if (new File(Pair.getFirst(getSourcePaths().get(0)), folderStructure).mkdirs()) {
+                copyRobotFile(robotProject.getSelectedRadioButton());
+            }
         }
 
         @Override

@@ -28,8 +28,8 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
+import static com.team334.frcplugin.Settings.WPI_PATH;
 import static com.team334.frcplugin.wizard.Properties.WPI_DIR;
-import static com.team334.frcplugin.wizard.Properties.WPI_PATH;
 
 public class Installer extends AnAction {
     private Properties props = new Properties();
@@ -167,14 +167,14 @@ public class Installer extends AnAction {
         return file;
     }
 
-    private String findXMLAttribute(File xml, String tag, String attrib) throws JDOMException, IOException {
+    private String findXMLAttribute(File xml, String tag, String attribute) throws JDOMException, IOException {
         SAXBuilder sax = new SAXBuilder();
         Document doc = sax.build(xml);
 
         List<Element> elems = doc.getRootElement().getChildren(tag);
         Element e = elems.get(elems.size() - 1);
 
-        return e.getAttributeValue(attrib);
+        return e.getAttributeValue(attribute);
     }
 
     private File extractFileFromJar(JarFile jar, String resource, String toDir) throws IOException {
