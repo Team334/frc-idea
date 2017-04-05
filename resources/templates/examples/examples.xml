@@ -1,20 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <examples>
-    <!-- TODO add back in when there are enough samples to justify tags
-    <tagDescription>
-      <name>Simple Robot</name>
-      <description>Examples for simple robot programs.</description>
-    </tagDescription>
-    <tagDescription>
-      <name>Network Tables</name>
-      <description>Examples of how to use Network Tables to accomplish a
-      variety of tasks such as sending and receiving values to both
-      dashboards and co-processors.</description>
-    </tagDescription>
-    <tagDescription>
-      <name>Simulation</name>
-      <description>Examples that can be run in simulation.</description>
-    </tagDescription>-->
     <tagDescription>
         <name>Getting Started with Java</name>
         <description>Examples for getting started with FRC Java</description>

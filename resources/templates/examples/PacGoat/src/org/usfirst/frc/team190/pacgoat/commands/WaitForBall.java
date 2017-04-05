@@ -1,8 +1,7 @@
 package $package.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
-
 import $package.Robot;
+import edu.wpi.first.wpilibj.command.Command;
 
 /**
  * Wait until the collector senses that it has the ball. This command does
@@ -10,13 +9,13 @@ import $package.Robot;
  * condition.
  */
 public class WaitForBall extends Command {
-	public WaitForBall() {
-		requires(Robot.collector);
-	}
+    public WaitForBall() {
+        requires(Robot.collector);
+    }
 
-	// Make this return true when this Command no longer needs to run execute()
-	@Override
-	protected boolean isFinished() {
-		return Robot.collector.hasBall();
-	}
+    // Make this return true when this Command no longer needs to run execute()
+    @Override
+    protected boolean isFinished() {
+        return Robot.collector.hasBall();
+    }
 }

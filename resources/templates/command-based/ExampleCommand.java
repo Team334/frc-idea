@@ -1,8 +1,7 @@
 package $package.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
-
 import $package.Robot;
+import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
