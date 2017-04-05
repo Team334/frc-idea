@@ -1,5 +1,5 @@
-<idea-plugin version="2">
-    <id>com.ze.frc</id>
+<idea-plugin>
+    <id>com.team334.frc</id>
     <name>FRC Intellij Plugin</name>
     <version>1.0</version>
     <vendor email="zelkatani@gmail.com" url="https://github.com/ze">Zakaria Elkatani</vendor>
@@ -20,11 +20,16 @@
                         serviceImplementation="com.team334.frcplugin.Settings"/>
     </extensions>
 
+    <depends optional="false">AntSupport</depends>
+
     <actions>
         <group text="WPILib">
             <add-to-group group-id="MainMenu" relative-to-action="RunMenu" anchor="after"/>
             <action class="com.team334.frcplugin.wizard.Installer" id="Install" icon="/icons/wpi.png"
                     text="Install WPILib" description="First time installation of WPILib"
+            />
+            <action class="com.team334.frcplugin.actions.Configuration" id="Configuration"
+                    text="Add Configuration" description="Add deployment configuration to project"
             />
             <action class="com.team334.frcplugin.actions.Deploy" id="Deploy"
                     text="Deploy" description="Deploy robot code"

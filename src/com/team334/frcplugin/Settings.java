@@ -18,7 +18,7 @@ import static java.io.File.separator;
                 @Storage("settings.xml")
         }
 )
-public class Settings implements PersistentStateComponent<Settings> {
+public final class Settings implements PersistentStateComponent<Settings> {
     private static String teamNumber = String.valueOf(0);
     private static String version = "current";
     private static String projectPackage = "org.usfirst.frc.team" + teamNumber + ".robot";

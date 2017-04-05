@@ -19,16 +19,17 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class RobotModuleBuilder extends JavaModuleBuilder {
-    String[] modules = new String[] {
-            "WPILib", "NetworkTables", "opencv", "cscore"
-    };
 
     @Override
     public ModuleWizardStep modifySettingsStep(@NotNull SettingsStep settingsStep) {
         return new RobotStep(settingsStep);
     }
 
-    public RobotModuleBuilder() {
+    RobotModuleBuilder() {
+        String[] modules = new String[] {
+                "WPILib", "NetworkTables", "opencv", "cscore"
+        };
+
         for (String module : modules) {
             addModuleLibrary(Settings.WPI_LIBS + File.separator + module + ".jar", null);
         }
