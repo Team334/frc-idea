@@ -13,6 +13,7 @@ import com.intellij.lang.ant.config.execution.AntRunConfigurationType;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 
 public final class RunConfiguration {
@@ -37,12 +38,17 @@ public final class RunConfiguration {
         Project p = DataKeys.PROJECT.getData(context);
         VirtualFile file = p.getBaseDir().findChild("build.xml");
 
+        if (file == null) {
+            Messages.showErrorDialog("Cannot find build.xml.", "Ant File Configuration");
+            return;
+        }
+
         AntConfiguration antConfiguration = AntConfiguration.getInstance(p);
         AntBuildFile buildFile = null;
         try {
             buildFile = antConfiguration.addBuildFile(file);
         } catch (AntNoFileException e1) {
-            e1.printStackTrace();
+            Messages.showErrorDialog("Ant file not found.", "Ant File Configuration");
         }
 
         AntRunConfigurationType antRunConfigurationType = new AntRunConfigurationType();

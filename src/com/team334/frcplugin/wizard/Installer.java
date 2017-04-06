@@ -5,6 +5,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.ui.Messages;
 import com.team334.frcplugin.Settings;
 import com.team334.frcplugin.panels.InstallProgress;
 import org.jdom.Document;
@@ -47,6 +48,11 @@ public class Installer extends AnAction {
             setTitle("WPILib Installer");
 
             init();
+        }
+
+        @Override
+        protected Action[] createActions() {
+            return new Action[] { getOKAction(), getCancelAction() };
         }
 
         private void shiftProgress(int shift) {
@@ -97,6 +103,9 @@ public class Installer extends AnAction {
             });
 
             new File(WPI_PATH, "user" + File.separator + "java" + File.separator + "lib").mkdirs();
+        } else {
+            Messages.showErrorDialog("WPILib folder already exists. Delete the folder, which is located in "
+                    + System.getProperty("user.home") + " and rerun.", "Installation");
         }
     }
 
@@ -124,7 +133,7 @@ public class Installer extends AnAction {
             TEMP_DIR.delete();
             Settings.installed = true;
         } catch (IOException e) {
-            e.printStackTrace();
+            Messages.showErrorDialog("Temporary file could not be created.", "Temporary File Creation");
         }
     }
 
@@ -155,8 +164,10 @@ public class Installer extends AnAction {
             extractFolderFromJar(javaJar, "ant", wpiDir);
             extractFolderFromJar(javaJar, "lib", wpiDir);
             extractFolderFromJar(javaJar, "javadoc", wpiDir);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException io) {
+            Messages.showErrorDialog("Failed to create temporary file.", "WPILib Installation");
+        } catch (JDOMException jd) {
+            Messages.showErrorDialog("Cannot find xml attributes.", "WPILib Installation");
         }
     }
 

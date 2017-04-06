@@ -1,6 +1,7 @@
 package com.team334.frcplugin.panels;
 
 import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.ui.Messages;
 import com.team334.frcplugin.Settings;
 import com.team334.frcplugin.wizard.Properties;
 import org.jetbrains.annotations.Nullable;
@@ -50,7 +51,7 @@ public class PropertiesControl extends DialogWrapper {
             try {
                 prop.serialize(WPI_PATH);
             } catch (IOException io) {
-                io.printStackTrace();
+                Messages.showErrorDialog("Cannot create wpilib.properties.", "Settings Serialization");
             }
         }
 

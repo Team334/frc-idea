@@ -4,6 +4,7 @@ import com.intellij.ide.util.projectWizard.JavaModuleBuilder;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.SettingsStep;
 import com.intellij.openapi.module.JavaModuleType;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Pair;
 import com.intellij.xml.actions.xmlbeans.FileUtils;
 import com.team334.frcplugin.Settings;
@@ -98,7 +99,9 @@ public class RobotModuleBuilder extends JavaModuleBuilder {
 
                 Files.write(path, content.getBytes("UTF-8"));
             } catch (IOException e) {
-                e.printStackTrace();
+                String err = String.format("Failed to replace %s with %s in file %s.", search, replace, file.getName());
+                Messages.showErrorDialog(err, "Project Creation");
+
             }
         }
 

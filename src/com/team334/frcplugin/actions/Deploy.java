@@ -11,6 +11,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import com.team334.frcplugin.Settings;
 import com.team334.frcplugin.project.RunConfiguration;
 
@@ -29,7 +30,7 @@ public class Deploy extends AnAction {
         try {
             runner.execute(environment);
         } catch (ExecutionException e1) {
-            e1.printStackTrace();
+            Messages.showErrorDialog("Failed to run deploy target, target may not exist.", "Deploy Execution");
         }
     }
 
