@@ -3,6 +3,7 @@ package com.team334.frcplugin.wizard;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Presentation;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.team334.frcplugin.Settings;
 import com.team334.frcplugin.panels.InstallProgress;
@@ -35,7 +36,7 @@ public class Installer extends AnAction {
     private Properties props = new Properties();
     private Settings settings = Settings.INSTANCE;
 
-    private Logger logger = new Logger();
+    private Logger logger;
     private Thread t = new Thread(this::install);
 
     private class Logger extends DialogWrapper {
@@ -84,14 +85,18 @@ public class Installer extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         if (WPI_DIR.mkdir()) {
-            logger.setModal(false);
-            logger.setResizable(false);
+            ApplicationManager.getApplication().invokeLater(() -> {
+                logger = new Logger();
 
-            logger.show();
+                logger.setModal(false);
+                logger.setResizable(false);
 
-            SwingUtilities.invokeLater(() -> t.start());
+                logger.show();
 
-            new File(WPI_PATH, "user/java").mkdirs();
+                SwingUtilities.invokeLater(() -> t.start());
+            });
+
+            new File(WPI_PATH, "user" + File.separator + "java" + File.separator + "lib").mkdirs();
         }
     }
 
@@ -110,7 +115,7 @@ public class Installer extends AnAction {
             TEMP_DIR.delete();
 
             if (TEMP_DIR.mkdir()) {
-                String pluginPath = WPI_PATH + "/java/" + settings.getVersion();
+                String pluginPath = WPI_PATH + File.separator + "java" + File.separator + settings.getVersion();
                 if (new File(pluginPath).mkdirs()) {
                     loadLibraries(TEMP_DIR.getAbsolutePath(), pluginPath);
                 }
@@ -147,9 +152,9 @@ public class Installer extends AnAction {
             JarFile javaJar = new JarFile(javaZip);
 
             logger.log("Extracting files from java.zip\n", 1);
-            extractFolderFromJar(javaJar, "ant/", wpiDir);
-            extractFolderFromJar(javaJar, "lib/", wpiDir);
-            extractFolderFromJar(javaJar, "javadoc/", wpiDir);
+            extractFolderFromJar(javaJar, "ant", wpiDir);
+            extractFolderFromJar(javaJar, "lib", wpiDir);
+            extractFolderFromJar(javaJar, "javadoc", wpiDir);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -219,7 +224,7 @@ public class Installer extends AnAction {
 
         while (entries.hasMoreElements()) {
             JarEntry entry = entries.nextElement();
-            if (entry.getName().contains(directory)) {
+            if (entry.getName().contains(directory + File.separator)) {
                 if (entry.isDirectory()) {
                     logger.log("creating: ");
                     new File(toDir, entry.getName()).mkdir();
