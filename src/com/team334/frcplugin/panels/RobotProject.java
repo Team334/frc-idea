@@ -5,7 +5,7 @@ import com.team334.frcplugin.Settings;
 import javax.swing.*;
 
 public class RobotProject {
-    private Settings settings = Settings.INSTANCE;
+    private Settings settings = Settings.getInstance();
 
     private JPanel robotProject;
 
@@ -29,7 +29,7 @@ public class RobotProject {
     }
 
     private JRadioButton[] getRadioButtons() {
-        return new JRadioButton[] {iterativeBased, commandBased, sampleBased};
+        return new JRadioButton[]{iterativeBased, commandBased, sampleBased};
     }
 
     public JRadioButton getSelectedRadioButton() {

@@ -10,13 +10,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class Properties extends AnAction {
-    private Settings settings = Settings.INSTANCE;
+    private static Settings settings = Settings.getInstance();
 
     static final File WPI_DIR = new File(Settings.WPI_PATH);
 
     @Override
     public void actionPerformed(AnActionEvent e) {
-        PropertiesControl props = new PropertiesControl();
+        PropertiesControl props = new PropertiesControl(settings);
 
         props.getTeamNumberField().setText(settings.getTeamNumber());
         props.getVersionField().setSelectedItem(settings.getVersion());
@@ -26,7 +26,7 @@ public class Properties extends AnAction {
         props.show();
     }
 
-    public void serialize(String dir) throws IOException {
+    public static void serialize(String dir) throws IOException {
         FileWriter fw = new FileWriter(new File(dir, "wpilib.properties"));
 
         fw.write("# new properties entered here will be removed on plugin update\n");

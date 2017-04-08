@@ -1,24 +1,16 @@
 package com.team334.frcplugin;
 
 import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
-
 import static java.io.File.separator;
 
-@State(
-        name = "Settings",
-        storages = {
-                @Storage(StoragePathMacros.WORKSPACE_FILE),
-                @Storage("settings.xml")
-        }
-)
-public final class Settings implements PersistentStateComponent<Settings> {
+@State(name = "Settings", storages = @Storage("other.xml"))
+public class Settings implements PersistentStateComponent<Settings> {
     private static String teamNumber = String.valueOf(0);
     private static String version = "current";
     private static String projectPackage = "org.usfirst.frc.team" + teamNumber + ".robot";
@@ -28,9 +20,9 @@ public final class Settings implements PersistentStateComponent<Settings> {
 
     public static boolean installed = false;
 
-    public static final Settings INSTANCE = new Settings();
-
-    private Settings() {}
+    public static Settings getInstance() {
+        return ServiceManager.getService(Settings.class);
+    }
 
     public String getTeamNumber() {
         return teamNumber;
@@ -60,7 +52,7 @@ public final class Settings implements PersistentStateComponent<Settings> {
     }
 
     @Override
-    public void loadState(Settings Settings) {
-        XmlSerializerUtil.copyBean(Settings, this);
+    public void loadState(Settings settings) {
+        XmlSerializerUtil.copyBean(settings, this);
     }
 }

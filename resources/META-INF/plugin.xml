@@ -16,8 +16,9 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <projectTemplatesFactory implementation="com.team334.frcplugin.project.ProjectFactory"/>
-        <projectService serviceInterface="com.team334.frcplugin.Settings"
-                        serviceImplementation="com.team334.frcplugin.Settings"/>
+        <applicationService serviceInterface="com.team334.frcplugin.Settings"
+                            serviceImplementation="com.team334.frcplugin.Settings"
+        />
     </extensions>
 
     <depends optional="false">AntSupport</depends>

@@ -6,7 +6,6 @@ import com.intellij.ide.util.projectWizard.SettingsStep;
 import com.intellij.openapi.module.JavaModuleType;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Pair;
-import com.intellij.xml.actions.xmlbeans.FileUtils;
 import com.team334.frcplugin.Settings;
 import com.team334.frcplugin.panels.RobotProject;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,7 +26,7 @@ public class RobotModuleBuilder extends JavaModuleBuilder {
     }
 
     RobotModuleBuilder() {
-        String[] modules = new String[] {
+        String[] modules = new String[]{
                 "WPILib", "NetworkTables", "opencv", "cscore"
         };
 
@@ -40,12 +39,9 @@ public class RobotModuleBuilder extends JavaModuleBuilder {
         private ModuleWizardStep javaStep;
         private RobotProject robotProject;
 
-        private Settings settings = Settings.INSTANCE;
+        private Settings settings = Settings.getInstance();
         private String pkg = settings.getPackage();
         private String folderStructure = pkg.replaceAll("\\.", File.separator);
-
-        private URL resourceUrl = this.getClass().getClassLoader().getResource("templates/");
-        private File resourceFolder = new File(resourceUrl.getPath());
 
         RobotStep(SettingsStep settingsStep) {
             javaStep = JavaModuleType.getModuleType().modifyProjectTypeStep(settingsStep, RobotModuleBuilder.this);
@@ -54,15 +50,26 @@ public class RobotModuleBuilder extends JavaModuleBuilder {
             settingsStep.addSettingsComponent(robotProject.getPanel());
         }
 
-        private void getFiles() {
-            for (File file : resourceFolder.listFiles()) {
-                if (file.isFile()) {
-                    File copy = new File(getContentEntryPath() + File.separator + file.getName());
-                    FileUtils.copyFile(file, copy);
+        private File getFileFromTemplates(String resourcePath, String fileName) {
+            InputStream in = getClass().getResourceAsStream("/templates/" + resourcePath);
 
-                    replaceStrings(file, "\\$package", pkg);
-                }
+            File f = new File(fileName);
+            try {
+                Files.copy(in, f.toPath());
+            } catch (IOException e) {
+                Messages.showErrorDialog("Failed to copy build files.", "Project Creation Error");
             }
+
+            return f;
+        }
+
+        private void getBuildFiles() {
+            String fileBase = getContentEntryPath() + File.separator + "build.";
+            File properties = getFileFromTemplates("build.properties", fileBase + "properties");
+            File xml = getFileFromTemplates("build.xml", fileBase + "xml");
+
+            replaceStrings(xml, "\\$package", pkg);
+            replaceStrings(properties, "\\$package", pkg);
         }
 
         private void copyRobotFile(JRadioButton button) {
@@ -80,12 +87,8 @@ public class RobotModuleBuilder extends JavaModuleBuilder {
                     break;
             }
 
-            File file = new File(resourceFolder, end);
-
             String path = Pair.getFirst(getSourcePaths().get(0)) + File.separator + folderStructure;
-            File robot = new File(path + File.separator + "Robot.java");
-
-            FileUtils.copyFile(file, robot);
+            File robot = getFileFromTemplates(end, path + File.separator + "Robot.java");
 
             replaceStrings(robot, "\\$package", pkg);
         }
@@ -114,7 +117,7 @@ public class RobotModuleBuilder extends JavaModuleBuilder {
         public void updateDataModel() {
             javaStep.updateDataModel();
 
-            getFiles();
+            getBuildFiles();
             if (new File(Pair.getFirst(getSourcePaths().get(0)), folderStructure).mkdirs()) {
                 copyRobotFile(robotProject.getSelectedRadioButton());
             }

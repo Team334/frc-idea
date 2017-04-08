@@ -35,7 +35,7 @@ import static com.team334.frcplugin.wizard.Properties.WPI_DIR;
 
 public class Installer extends AnAction {
     private Properties props = new Properties();
-    private Settings settings = Settings.INSTANCE;
+    private Settings settings = Settings.getInstance();
 
     private Logger logger;
     private Thread t = new Thread(this::install);
@@ -50,9 +50,10 @@ public class Installer extends AnAction {
             init();
         }
 
+        @NotNull
         @Override
         protected Action[] createActions() {
-            return new Action[] { getOKAction(), getCancelAction() };
+            return new Action[]{getOKAction(), getCancelAction()};
         }
 
         private void shiftProgress(int shift) {

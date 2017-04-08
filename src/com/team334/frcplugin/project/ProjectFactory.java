@@ -14,13 +14,13 @@ public class ProjectFactory extends ProjectTemplatesFactory {
     @NotNull
     @Override
     public String[] getGroups() {
-        return new String[] {"WPILib"};
+        return new String[]{"WPILib"};
     }
 
     @NotNull
     @Override
     public ProjectTemplate[] createTemplates(@Nullable String s, WizardContext wizardContext) {
-        return new ProjectTemplate[] {new RobotTemplate(), new ExampleTemplate()};
+        return new ProjectTemplate[]{new RobotTemplate(), new ExampleTemplate()};
     }
 
     @Override
