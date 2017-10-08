@@ -2,7 +2,7 @@
     <id>com.team334.frc</id>
     <name>FRC Intellij Plugin</name>
     <version>1.0</version>
-    <vendor email="zelkatani@gmail.com" url="https://github.com/ze">Zakaria Elkatani</vendor>
+    <vendor email="bthsrobotics334@bths.edu" url="https://github.com/team334/frc-idea">Team 334</vendor>
 
     <description><![CDATA[
         A WPILib Plugin for FRC teams who use IntelliJ

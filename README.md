@@ -11,9 +11,8 @@ frc-idea is a plugin for IntelliJ IDEA that allows for FRC teams to create and d
 
 ## Installing
 
+* Download the latest release from the releases tab.
 * Open up IntelliJ Settings which can be accessed via `ctrl+alt+s`.
 * Go to the plugins tab and select `Install plugin from disk...`.
-* Select frc-idea.jar, submit and restart, the plugin should then work.
+* Select `frc-idea.jar`, submit and restart, the plugin should then work.
 
-When further progress is made in the plugin, it will be submitted for review to the Jetbrains plugin repository for official release.
-Afterwards, the plugin can then be installed from there.
